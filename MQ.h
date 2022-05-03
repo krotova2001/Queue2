@@ -16,21 +16,25 @@ public:
 		end = start = nullptr;
 	}
 
-	MQ(const MQ& C) // конструктор копирования
+	void Clone (MQ& const C) 
 	{
-		if (end) // если очередь не пуста
+		if (C.start) // если очередь не пуста
 		{
-			Litem<T>* tmp = start;
-			do
+			Litem<T>* tmp = C.start;
+			while (tmp)
 			{
-				C.Add(tmp);
+				/*
+				Litem<T>* N = new Litem<T>;
+				N->data = tmp->data;
+				N->p = nullptr;
+				(C.start) ? N->n = C.end, C.end->p = N : C.start = N;
+				end = N;
+				h++;
 				tmp = tmp->p;
-			} 
-			while (tmp);
-		}
-		else // если очередь пуста
-		{
-			C.end = C.start = nullptr;
+				*/
+				Add(tmp->data);
+				tmp = tmp->p;
+			}
 		}
 	}
 	
@@ -58,7 +62,7 @@ public:
 		return *this;
 	}
 
-	MQ& Clear() // полная очистка очереди
+	void Clear() // полная очистка очереди
 	{
 		while (!Empty())
 		{
@@ -71,6 +75,10 @@ public:
 	
 	void Show() //показать очередь
 	{
+		if (start)
+		{
+
+		
 		Litem<T>* tmp = end;
 		cout << "-------\n";
 		do
@@ -79,6 +87,7 @@ public:
 			tmp = tmp->n;
 		} 
 		while (tmp);
+		}
 	}
 };
 
