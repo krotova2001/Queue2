@@ -16,26 +16,50 @@ public:
 		end = start = nullptr;
 	}
 
-	void Clone (MQ& const C) 
+	Litem<T>* Clone (MQ& const C) // функция клонирования очереди
 	{
 		if (C.start) // если очередь не пуста
 		{
-			Litem<T>* tmp = C.start;
-			while (tmp)
+			Litem<T>* tmp = C.start; // создаем временный элемент
+			while (tmp) // пока элемент не пустой
 			{
-				/*
-				Litem<T>* N = new Litem<T>;
-				N->data = tmp->data;
-				N->p = nullptr;
-				(C.start) ? N->n = C.end, C.end->p = N : C.start = N;
-				end = N;
-				h++;
-				tmp = tmp->p;
-				*/
-				Add(tmp->data);
-				tmp = tmp->p;
+				Add(tmp->data); // добавляем
+				tmp = tmp->p; // сдвигаем элемент на предыдущий
 			}
 		}
+		return start; // возвращаем начало очереди зачем-то
+	}
+
+	MQ operator+(MQ& const P) // перегрузка оператора + 
+	{
+		MQ N; // временный объект
+		N.Clone(*this); // клонируем в нее текущую очередь
+		if (P.start) // если есть что прибавить, прибавляем
+		{
+			Litem<T>* tmp = P.start; // создаем временный элемент
+			while (tmp) // пока элемент не пустой
+			{
+				N.Add(tmp->data); // добавляем
+				tmp = tmp->p; // сдвигаем элемент на предыдущий
+			}
+		}
+		return N;
+	}
+
+	MQ operator*(MQ& const P) //функция добавления одинаковых элементов
+	{ // не учитывает двойные встречи одинаковых значений
+		MQ N; // временный объект
+		for (Litem<T>* i = start;i; i=i->p) // обычным двойным циклом ищем совпадения
+		{
+			for (Litem<T>* j = P.start;j; j=j->p)
+			{
+				if (i->data==j->data)
+				{
+					N.Add(j->data); // и добавляем их в новый объект
+				}
+			}
+		}
+		return N;
 	}
 	
 	MQ& Add(const T& d) // добавление элемента в очередь
